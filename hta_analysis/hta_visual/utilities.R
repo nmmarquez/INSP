@@ -1,13 +1,26 @@
 rm(list=ls())
 pacman::p_load(sp, data.table, rgdal, maptools, leaflet, surveillance, spdep, 
-               ggplot2, rgeos, dplyr)
+               ggplot2, rgeos, dplyr, rdrop2)
+source("../../libraries/utils.R")
 
 models <- list.files("./models/", full.names=TRUE)
 names(models) <- gsub(".csv", "", list.files("./models/"))
 
 # pull the shape file into mem
 read_map_data <- function(){
-    df <- readOGR("./shape_files/")
+    home <- "./shape_files/"
+    if(!dir.exists(home)){
+        dir.create(home)
+        token <- load_token()
+        shape_files <- drop_dir("Mapas/Municipios", dtoken=token)$path
+        shape_files <- grep("Municipios\\.", shape_files, value=TRUE)
+        for(f in shape_files){
+            f_split <- strsplit(f, "/")[[1]]
+            f_ <- paste0(home, f_split[length(f_split)])
+            drop_get(f, f_)
+        }
+    }
+    df <- readOGR(home)
     
     # translate to desired proj4 string
     p4s <- "+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84"

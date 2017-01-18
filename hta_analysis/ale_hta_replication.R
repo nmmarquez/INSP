@@ -1,6 +1,9 @@
 rm(list=ls())
 set.seed(123)
 pacman::p_load(readstata13, data.table, rdrop2)
+source(paste0(dirname(sys.frame(1)$ofile), "/../libraries/utils.R"))
+
+token <- load_token()
 
 file_muni <- tempfile()
 file_hta <- tempfile()
@@ -10,11 +13,11 @@ muni_file_path <- paste0(home_dir, "1 BASES DE DATOS/matriz_muni.dta")
 hta_file_path <- paste0(home_dir, "1 BASES DE DATOS/HTA Ensanut 2012.dta")
 
 # load in data sets
-drop_get(muni_file_path, file_muni)
+drop_get(muni_file_path, file_muni, dtoken=token)
 muni_df <- read.dta13(file_muni)
 unlink(file_muni)
 
-drop_get(hta_file_path, file_hta)
+drop_get(hta_file_path, file_hta, dtoken=token)
 hta_data <- read.dta13(file_hta)
 unlink(file_hta)
 
@@ -91,5 +94,9 @@ df_global[,edad_cat2:= "0"]
 
 df_todo <- rbindlist(list(df_predict, df_age, df_sex, df_global))
 write_home <- paste0(dirname(sys.frame(1)$ofile), "/hta_visual/models/")
+
+if(!dir.exists(write_home)){
+    dir.create(write_home)
+}
 
 fwrite(df_todo, file=paste0(write_home, "simple_model_data.csv"))
