@@ -1,26 +1,17 @@
 rm(list=ls())
-library(sp)
-library(data.table)
-library(rgdal)
-library(maptools)
-library(leaflet)
-library(surveillance)
-library(spdep)
-library(MASS)
-library(sparseMVN)
-library(Matrix)
-library(ggplot2)
-library(readstata13)
+pacman::p_load(sp, data.table, rgdal, maptools, leaflet, surveillance, spdep, 
+               ggplot2, rgeos, dplyr)
 
-DF <- fread("./prev_data.csv")
+models <- list.files("./models/", full.names=TRUE)
+names(models) <- gsub(".csv", "", list.files("./models/"))
 
 # pull the shape file into mem
 read_map_data <- function(){
-    df <- readOGR("/home/nmarquez/Downloads/Mapas/Municipios/")
+    df <- readOGR("./shape_files/")
     
     # translate to desired proj4 string
     p4s <- "+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84"
-    df2 <- spTransform(rgeos::gSimplify(df, 250), CRS(p4s))
+    df2 <- spTransform(gSimplify(df, 25), CRS(p4s))
     df2 <- SpatialPolygonsDataFrame(df2, df@data)
     df2@data$muni <- paste(df2$CVE_ENT, df2$CVE_MUN, sep="")
     df2@data$muni <- as.integer(df2@data$muni)
@@ -34,10 +25,12 @@ hist_plot <- function(df){
         xlab("County Simulation Values") + ylab("Count")
 }
 
-data_map <- function(age, sex){
+data_map <- function(age, sex, model){
+    model <- models[model]
+    DF <- fread("./models/age_sex_model.csv")
     df <- subset(DF, edad_cat2 == age & sexo == sex)
     map_df <- MAP_DF
-    map_df@data <- dplyr::left_join(map_df@data, df)
+    map_df@data <- left_join(map_df@data, df)
     map_df@data$data <- map_df@data$prevelance
     map_df
 }

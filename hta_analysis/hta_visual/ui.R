@@ -1,11 +1,10 @@
 rm(list=ls())
-library(shiny)
-library(shinydashboard)
-library(leaflet)
-library(data.table)
-df <- fread("./prev_data.csv")
+pacman::p_load(shiny, shinydashboard, leaflet, data.table)
+
+df <- fread(list.files("./models", full.names=T)[1])
 ages <- sort(as.numeric(as.character(unique(df$edad_cat2))))
 sex <- as.character(unique(df$sexo))
+models <- gsub(".csv", "", list.files("./models/"))
 
 header <- dashboardHeader(
     title = 'Prevelencia HTA'
@@ -31,7 +30,8 @@ body <- dashboardBody(
 
 sidebar <- dashboardSidebar(
     selectInput('edad', 'Edad', ages),
-    selectInput('sexo', 'Sexo', sex)
+    selectInput('sexo', 'Sexo', sex),
+    selectInput('modelo', 'Modelo', models)
 )
 
 dashboardPage(
