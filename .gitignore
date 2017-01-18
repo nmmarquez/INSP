@@ -1,0 +1,10 @@
+*shape_files/
+*models/
+*.Rda*
+*.rda*
+*.Rds
+*.rds
+*.Rhistory
+*.pyc
+*.csv
+*.dta
