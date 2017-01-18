@@ -1,5 +1,4 @@
-library(shiny)
-library(leaflet)
+pacman::p_load(shiny, leaflet)
 source("./utilities.R")
 
 shinyServer(function(input,output){
