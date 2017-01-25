@@ -1,10 +1,14 @@
-rm(list=ls())
+rm(list=ls()) # remove everything from the workspace
 set.seed(123)
 pacman::p_load(readstata13, data.table, rdrop2)
+# this line only works when sourcing because of relative pathways
+# alternatively source("~/Documents/INSP/libraries/utils.R")
 source(paste0(dirname(sys.frame(1)$ofile), "/../libraries/utils.R"))
 
+# if you dont have the token saved we can save it now
 token <- load_token()
 
+# create temp files for the dtas
 file_muni <- tempfile()
 file_hta <- tempfile()
 
