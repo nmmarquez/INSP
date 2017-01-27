@@ -12,11 +12,12 @@ token <- load_token()
 file_muni <- tempfile()
 file_hta <- tempfile()
 
+# pull the data files from drop box
 home_dir <- "ANALÍSIS SIC-MIDO/"
 muni_file_path <- paste0(home_dir, "1 BASES DE DATOS/matriz_muni.dta")
 hta_file_path <- paste0(home_dir, "1 BASES DE DATOS/HTA Ensanut 2012.dta")
 
-# load in data sets
+# load in data sets from the temp files
 drop_get(muni_file_path, file_muni, dtoken=token)
 muni_df <- read.dta13(file_muni)
 unlink(file_muni)
@@ -25,7 +26,7 @@ drop_get(hta_file_path, file_hta, dtoken=token)
 hta_data <- read.dta13(file_hta)
 unlink(file_hta)
 
-# get the cat variables to be the same
+# get the age cat variables to be the same
 hta_data$edad_cat2 <- hta_data$edad_cat / 5 - 3
 
 # see the models inputs
@@ -72,6 +73,7 @@ df_predict <- as.data.table(df_predict)
 df_predict$edad_cat2 <- as.character(df_predict$edad_cat2)
 df_predict$sexo <- as.character(df_predict$sexo)
 
+# now we need to aggregate by sex, age then both
 df_sex <- copy(df_predict)
 df_sex[,pop_specific:=sum(pop_specific),by=list(sexo, muni)]
 df_sex[,pop_affl:=sum(pop_affl),by=list(sexo, muni)]
@@ -97,6 +99,8 @@ df_global[,sexo:= "juntos"]
 df_global[,edad_cat2:= "0"] 
 
 df_todo <- rbindlist(list(df_predict, df_age, df_sex, df_global))
+
+# write the file in a relative file path using this files location
 write_home <- paste0(dirname(sys.frame(1)$ofile), "/hta_visual/models/")
 
 if(!dir.exists(write_home)){
