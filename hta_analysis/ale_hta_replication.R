@@ -1,16 +1,6 @@
 rm(list=ls()) # remove everything from the workspace
 set.seed(123)
-pacman::p_load(readstata13, data.table, rdrop2)
-# this line only works when sourcing because of relative pathways
-# alternatively source("~/Documents/INSP/libraries/utils.R")
-source(paste0(dirname(sys.frame(1)$ofile), "/../libraries/utils.R"))
-
-# if you dont have the token saved we can save it now
-token <- load_token()
-
-# create temp files for the dtas
-file_muni <- tempfile()
-file_hta <- tempfile()
+pacman::p_load(INSP, data.table)
 
 # pull the data files from drop box
 home_dir <- "ANALÍSIS SIC-MIDO/"
@@ -18,13 +8,8 @@ muni_file_path <- paste0(home_dir, "1 BASES DE DATOS/matriz_muni.dta")
 hta_file_path <- paste0(home_dir, "1 BASES DE DATOS/HTA Ensanut 2012.dta")
 
 # load in data sets from the temp files
-drop_get(muni_file_path, file_muni, dtoken=token)
-muni_df <- read.dta13(file_muni)
-unlink(file_muni)
-
-drop_get(hta_file_path, file_hta, dtoken=token)
-hta_data <- read.dta13(file_hta)
-unlink(file_hta)
+muni_df <- read_drop_dta(muni_file_path)
+hta_data <- read_drop_dta(hta_file_path)
 
 # get the age cat variables to be the same
 hta_data$edad_cat2 <- hta_data$edad_cat / 5 - 3
