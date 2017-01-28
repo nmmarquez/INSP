@@ -3,3 +3,4 @@
 export(load_token)
 export(model_path)
 export(read_drop_dta)
+export(spdf2leaf)

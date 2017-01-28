@@ -3,10 +3,9 @@
 
 rm(list=ls())
 set.seed(123)
-pacman::p_load(data.table, sp, rgeos, leaflet, surveillance, rgdal)
+pacman::p_load(data.table, sp, rgeos, leaflet, surveillance, rgdal, INSP)
 
-setwd("~/Documents/INSP/hta_analysis/hta_visual/shape_files/")
-df <- readOGR("./")
+df <- mx.sp.df
 
 # first we want to simulate the pop in each location
 df$N <- sample(120:120000, nrow(df@data), replace=T)
@@ -27,3 +26,13 @@ eps.sigma <- .1
 RR <- exp(B0 + B1 * (df$Dht / df$D) + rnorm(nrow(df@data), 0, eps.sigma))
 summary(RR)
 
+# We can create an expected value based on soley pop
+Eprev <- .1
+df@data$E <- Eprev * df@data$N
+df@data$obs <- rpois(nrow(df@data), df$E * RR)
+df@data$prev <- df$obs / df$N
+
+# lets make sure prevelance isnt over 1 -_-
+summary(df@data$prev)
+
+spdf2leaf(df, "prev")
