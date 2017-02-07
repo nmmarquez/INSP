@@ -4,7 +4,7 @@
 \alias{spdf2leaf}
 \title{render a spatial data frame in leaflet}
 \usage{
-spdf2leaf(df, col = "data")
+spdf2leaf(df, col = "data", label = NULL)
 }
 \value{
 leaflet object
@@ -13,4 +13,3 @@ leaflet object
 Takes a spatial data frame and turns it into an interactive 
 leaflet instance.
 }
-

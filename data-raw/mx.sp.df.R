@@ -24,5 +24,6 @@ df2 <- SpatialPolygonsDataFrame(df2, df@data)
 df2@data$muni <- paste(df2$CVE_ENT, df2$CVE_MUN, sep="")
 df2@data$muni <- as.integer(df2@data$muni)
 mx.sp.df <- df2
-devtools::use_data(mx.sp.df)
+mx.sp.df@data$GEOID <- paste0(mx.sp.df$CVE_ENT, mx.sp.df$CVE_MUN)
+devtools::use_data(mx.sp.df, overwrite=TRUE)
 

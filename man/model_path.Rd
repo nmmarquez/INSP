@@ -12,4 +12,3 @@ named character vector of file paths
 \description{
 Loads all the dta file paths from a designated location
 }
-

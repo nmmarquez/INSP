@@ -13,4 +13,3 @@ data frame object read from dropbox dta file path
 Read a dropbox dta file by pulling it into a temp file and
 using readstata13 to parse it into a data frame
 }
-
