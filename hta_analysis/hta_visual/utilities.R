@@ -1,9 +1,9 @@
 rm(list=ls())
-pacman::p_load(sp, data.table, rgdal, maptools, leaflet, surveillance, spdep, 
+pacman::p_load(sp, data.table, rgdal, maptools, leaflet, spdep, 
                ggplot2, rgeos, dplyr, rdrop2, INSP)
 
-models <- list.files("./models/", full.names=TRUE)
-names(models) <- gsub(".csv", "", list.files("./models/"))
+DF <- fread("./models/models_limpia.csv")
+DF[,GEOID:=sprintf("%05d", GEOID)]
 
 hist_plot <- function(df){
     ggplot(df@data, aes(x=data)) + geom_histogram(fill="seagreen") + 
@@ -11,11 +11,9 @@ hist_plot <- function(df){
 }
 
 data_map <- function(age, sex, model){
-    model <- models[model]
-    DF <- fread("./models/age_sex_model.csv")
-    df <- subset(DF, edad_cat2 == age & sexo == sex)
+    df <- subset(DF, edad == age & sexo == sex & model_name==model)
     map_df <- mx.sp.df
     map_df@data <- left_join(map_df@data, df)
-    map_df@data$data <- map_df@data$prevelance
+    map_df@data$data <- map_df@data$prevalencia_cor
     map_df
 }

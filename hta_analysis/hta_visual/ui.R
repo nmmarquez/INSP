@@ -1,13 +1,14 @@
 rm(list=ls())
 pacman::p_load(shiny, shinydashboard, leaflet, data.table)
 
-df <- fread(list.files("./models", full.names=T)[1])
-ages <- sort(as.numeric(as.character(unique(df$edad_cat2))))
-sex <- as.character(unique(df$sexo))
-models <- gsub(".csv", "", list.files("./models/"))
+source("./utilities.R")
+
+ages <- sort(unique(DF$edad))
+sex <- sort(unique(DF$sexo))
+models <- sort(unique(DF$model_name))
 
 header <- dashboardHeader(
-    title = 'Prevelencia HTA'
+    title = 'Prevelencia'
 )
 
 body <- dashboardBody(

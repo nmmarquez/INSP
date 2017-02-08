@@ -1,5 +1,12 @@
+library(RMySQL)
+
 read_creds <- function(){
     read.csv(paste0(paste0(dirname(sys.frame(1)$ofile), "/../.creds.csv")),
+             stringsAsFactors=FALSE)
+}
+
+read_creds <- function(){
+    read.csv("../.creds.csv",
              stringsAsFactors=FALSE)
 }
 
@@ -60,9 +67,44 @@ WHERE
     AND cmd.cause_id IN ({});
 "
 
+cod_call_distinct <- "
+SELECT 
+    cmd.data_version_id,
+    cmd.cause_id,
+    cmd.year_id,
+    cmd.age_group_id,
+    cmd.sex_id,
+    cmd.location_id,
+    cmd.cf_final,
+    cmd.cf_raw,
+    #cmdv.nid, 
+    #cmdv.source,
+    lhh.location_name
+FROM
+    cod.cm_data cmd
+INNER JOIN shared.location_hierarchy_history lhh ON
+    cmd.location_id = lhh.location_id
+WHERE
+    lhh.location_set_version_id = 75 
+    AND lhh.parent_id = 130 # only pull from mexico states
+    AND cmd.cause_id = {};
+"
+
 cause_list_call <- "
 SELECT cause_id, acause, cause_name, is_estimate
 FROM shared.cause_hierarchy_history
 WHERE cause_set_version_id = 96; # last gbd estimation cause list for 2015
 "
 
+loc_call <- "
+SELECT location_id, location_name FROM shared.location_hierarchy_history
+WHERE location_set_version_id = 75
+AND (parent_id = 130 OR location_id = 130);
+"
+
+age_call <- "
+SELECT age_group_id, age_group_name 
+FROM shared.age_group
+WHERE age_group_id >= 2
+AND age_group_id <= 27;
+"
