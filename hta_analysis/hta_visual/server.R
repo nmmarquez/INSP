@@ -1,4 +1,4 @@
-pacman::p_load(shiny, leaflet, INSP)
+pacman::p_load(shiny, leaflet, INSP, plotly)
 source("./utilities.R")
 
 shinyServer(function(input,output){
@@ -8,5 +8,8 @@ shinyServer(function(input,output){
     })
     output$hist <- renderPlot({
         hist_plot(df())
+    })
+    output$cor <- renderPlot({
+        contra_ENS(df())
     })
 })

@@ -1,6 +1,6 @@
 rm(list=ls())
 pacman::p_load(sp, data.table, rgdal, maptools, leaflet, spdep, 
-               ggplot2, rgeos, dplyr, rdrop2, INSP)
+               ggplot2, rgeos, dplyr, rdrop2, INSP, plotly)
 
 DF <- fread("./models/models_limpia.csv")
 DF[,GEOID:=sprintf("%05d", GEOID)]
@@ -16,4 +16,15 @@ data_map <- function(age, sex, model){
     map_df@data <- left_join(map_df@data, df)
     map_df@data$data <- map_df@data$prevalencia_cor
     map_df
+}
+
+contra_ENS <- function(df){
+    df <- df@data
+    df <- subset(df, select=c(prev_ent_cor, prev_ENS, ent_num))
+    df <- unique(df)
+    corv <- stats::cor(df$prev_ent_cor, df$prev_ENS)
+    gg1 <- ggplot(data=df, aes(x=prev_ENS, y=prev_ent_cor, label=ent_num)) + 
+        geom_point() + labs(title=paste0("Corr: ", corv)) + 
+        geom_abline()
+    gg1
 }

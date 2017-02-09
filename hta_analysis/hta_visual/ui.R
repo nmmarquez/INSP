@@ -16,7 +16,8 @@ body <- dashboardBody(
         column(width=12,
                tabBox(id='tabvals', width=NULL,
                    tabPanel('Map', leafletOutput('mapplot'), value=1),
-                   tabPanel('Histogram', plotOutput('hist'), value=2)
+                   tabPanel('Histogram', plotOutput('hist'), value=2),
+                   tabPanel('Correlation', plotOutput('cor'), value=3)
                )
         ) 
     ),
