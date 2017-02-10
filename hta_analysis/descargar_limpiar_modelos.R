@@ -41,4 +41,4 @@ DT$edad <- 22
 DT$sexo <- "ambos"
 DT$GEOID <- DT$cod_mun
 
-fwrite(DT, "~/Documents/INSP/hta_visual/models/models_limpia.csv")
+fwrite(DT, "~/Documents/INSP/hta_analysis/hta_visual/models/models_limpia.csv")
