@@ -9,7 +9,7 @@ shinyServer(function(input,output){
     output$hist <- renderPlot({
         hist_plot(df())
     })
-    output$cor <- renderPlot({
+    output$cor <- renderPlotly({
         contra_ENS(df())
     })
 })
