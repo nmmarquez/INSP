@@ -26,5 +26,5 @@ contra_ENS <- function(df){
     gg1 <- ggplot(data=df, aes(x=prev_ENS, y=prev_ent_cor, label=ent_num)) + 
         geom_point() + labs(title=paste0("Corr: ", corv)) + 
         geom_abline()
-    gg1
+    ggplotly(gg1)
 }
