@@ -28,3 +28,19 @@ contra_ENS <- function(df){
         geom_abline()
     ggplotly(gg1)
 }
+
+spdf2leafnuevo <- function(df){
+    popup <- paste0("Loc Name: ", df@data$NOM_MUN, "<br> Prevalencia: ", 
+                    round(df@data$prevalencia_cor, 3),
+                    "(",round(df@data$`_ci_lb`,3), "-", round(df@data$`_ci_ub`,3), ")",   
+                    "<br> Poblacion: ", 
+                    df@data$pop)
+    pal <- colorNumeric(palette = "YlGnBu", domain = df@data$prevalencia_cor)
+    map1 <- leaflet() %>% addProviderTiles("CartoDB.Positron") %>% 
+        addPolygons(data = df, fillColor = ~pal(prevalencia_cor), color = "#b2aeae", 
+                    weight = 0.3, fillOpacity = 0.7, smoothFactor = 0.2, 
+                    popup = popup) %>% 
+        addLegend("bottomright", pal = pal, values = df$prevalencia_cor, 
+                  title = "Prevalencia", opacity = 1)
+    map1
+}
