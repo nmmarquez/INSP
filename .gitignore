@@ -10,3 +10,7 @@
 *.dta
 .Rproj.user
 *.Rproj
+*.dll
+*.so
+*.o
+
