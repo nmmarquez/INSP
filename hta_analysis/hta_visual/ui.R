@@ -1,5 +1,9 @@
 rm(list=ls())
-pacman::p_load(shiny, shinydashboard, leaflet, data.table)
+
+library(shiny)
+library(shinydashboard)
+library(leaflet)
+library(data.table)
 
 source("./utilities.R")
 

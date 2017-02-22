@@ -1,4 +1,6 @@
-pacman::p_load(shiny, leaflet, INSP, plotly)
+library(shiny)
+library(plotly)
+
 source("./utilities.R")
 
 shinyServer(function(input,output){

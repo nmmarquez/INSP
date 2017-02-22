@@ -13,4 +13,4 @@
 *.dll
 *.so
 *.o
-
+*rsconnect/

@@ -1,6 +1,17 @@
 rm(list=ls())
-pacman::p_load(sp, data.table, rgdal, maptools, leaflet, spdep, 
-               ggplot2, rgeos, dplyr, rdrop2, INSP, plotly)
+
+library(sp)
+library(data.table)
+library(rgdal)
+library(maptools)
+library(leaflet)
+library(spdep)
+library(ggplot2)
+library(rgeos)
+library(dplyr)
+library(rdrop2)
+library(plotly)
+library(INSP)
 
 DF <- fread("./models/models_limpia.csv")
 DF[,GEOID:=sprintf("%05d", GEOID)]
